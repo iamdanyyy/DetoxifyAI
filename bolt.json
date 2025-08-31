@@ -1,0 +1,45 @@
+{
+  "name": "detoxifyai",
+  "description": "AI-powered addiction recovery and detox support app",
+  "build": {
+    "command": "npm install && npm run build",
+    "output": "build"
+  },
+  "env": {
+    "REACT_APP_SUPABASE_URL": {
+      "description": "Supabase project URL",
+      "required": true
+    },
+    "REACT_APP_SUPABASE_ANON_KEY": {
+      "description": "Supabase anonymous key",
+      "required": true
+    },
+    "REACT_APP_OPENAI_API_KEY": {
+      "description": "OpenAI API key",
+      "required": true
+    },
+    "REACT_APP_INTASEND_API_KEY": {
+      "description": "IntaSend API key for payments",
+      "required": true
+    }
+  },
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/favicon.ico"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "/manifest.json"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
+
