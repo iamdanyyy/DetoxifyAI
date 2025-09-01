@@ -10,6 +10,7 @@ export const ProgressForm: React.FC = () => {
   const [mood, setMood] = useState('');
   const [cravingsLevel, setCravingsLevel] = useState(5);
   const [notes, setNotes] = useState('');
+  const [addictionType, setAddictionType] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -19,6 +20,13 @@ export const ProgressForm: React.FC = () => {
     { value: 'okay', label: 'Okay', icon: Meh },
     { value: 'bad', label: 'Bad', icon: Frown },
     { value: 'terrible', label: 'Terrible', icon: Angry },
+  ];
+
+  const addictionOptions = [
+    { value: 'alcohol', label: 'Alcohol' },
+    { value: 'porn', label: 'Porn' },
+    { value: 'masturbation', label: 'Masturbation' },
+    { value: 'food', label: 'Food' },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -37,6 +45,7 @@ export const ProgressForm: React.FC = () => {
         date,
         mood,
         cravings_level: cravingsLevel,
+        addiction_type: addictionType,
         notes: notes.trim(),
       });
 
@@ -48,6 +57,7 @@ export const ProgressForm: React.FC = () => {
             date,
             mood,
             cravings_level: cravingsLevel,
+            addiction_type: addictionType,
             notes: notes.trim(),
           },
         ])
@@ -63,6 +73,7 @@ export const ProgressForm: React.FC = () => {
       setMood('');
       setCravingsLevel(5);
       setNotes('');
+      setAddictionType('');
       
       // Reset success message after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
@@ -93,6 +104,23 @@ export const ProgressForm: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="addictionType" className="block text-sm font-medium text-gray-700 mb-1">
+            Addiction Type
+          </label>
+          <select
+            id="addictionType"
+            value={addictionType}
+            onChange={(e) => setAddictionType(e.target.value)}
+            className="input-field"
+            required
+          >
+            <option value="" disabled>Select type</option>
+            {addictionOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
         <div>
           <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
             Date
@@ -179,9 +207,9 @@ export const ProgressForm: React.FC = () => {
 
         <button
           type="submit"
-          disabled={loading || !mood}
+          disabled={loading || !mood || !addictionType}
           className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-            loading || !mood
+            loading || !mood || !addictionType
               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
               : 'btn-primary'
           }`}
@@ -195,6 +223,11 @@ export const ProgressForm: React.FC = () => {
             <>
               <Save className="w-4 h-4" />
               Select a mood to save progress
+            </>
+          ) : !addictionType ? (
+            <>
+              <Save className="w-4 h-4" />
+              Select an addiction type to save
             </>
           ) : (
             <>

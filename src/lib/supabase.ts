@@ -29,6 +29,7 @@ export interface ProgressLog {
   date: string;
   mood: string;
   cravings_level: number;
+  addiction_type?: string;
   notes: string;
   created_at: string;
 }

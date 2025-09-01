@@ -228,7 +228,7 @@ export const ProgressDashboard: React.FC = () => {
                  </div>
                 <div>
                   <p className="font-medium text-gray-900">{format(new Date(log.date), 'MMM dd, yyyy')}</p>
-                  <p className="text-sm text-gray-500">Cravings: {log.cravings_level}/10</p>
+                  <p className="text-sm text-gray-500">Cravings: {log.cravings_level}/10{log.addiction_type ? ` • ${log.addiction_type}` : ''}</p>
                 </div>
               </div>
               {log.notes && (
