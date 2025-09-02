@@ -82,7 +82,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // But let's also manually create it as a backup
     if (data.user) {
       try {
-        const { error: profileError } = await supabase
+        console.log('Attempting to create user profile for:', data.user.id);
+        
+        const { data: profileData, error: profileError } = await supabase
           .from('users')
           .insert([
             {
@@ -92,16 +94,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               sobriety_start: sobrietyStart,
               is_premium: false,
             },
-          ]);
+          ])
+          .select(); // Add select() to see what was inserted
         
         if (profileError) {
           console.error('Profile creation error:', profileError);
+          console.error('Error details:', {
+            code: profileError.code,
+            message: profileError.message,
+            details: profileError.details,
+            hint: profileError.hint
+          });
           // Don't throw here as the trigger might have already created it
+        } else {
+          console.log('Profile created successfully:', profileData);
         }
       } catch (error) {
         console.error('Manual profile creation failed:', error);
+        console.error('Error type:', typeof error);
+        console.error('Full error object:', error);
         // Continue anyway as the trigger should handle it
       }
+    } else {
+      console.error('No user data returned from signup');
     }
     
     // Sign out the user after successful signup to redirect to login
