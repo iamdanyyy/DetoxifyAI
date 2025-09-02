@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot } from 'lucide-react';
 import { aiService } from '../../lib/ai';
+import { useAuth } from '../../contexts/AuthContext';
+import { supabase } from '../../lib/supabase';
 
 interface ChatMessage {
   id: string;
@@ -10,6 +12,8 @@ interface ChatMessage {
 }
 
 export const ChatInterface: React.FC = () => {
+  const { user } = useAuth();
+  const [userProfile, setUserProfile] = useState<any>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -25,6 +29,34 @@ export const ChatInterface: React.FC = () => {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (user) {
+        try {
+          const { data, error } = await supabase
+            .from('users')
+            .select('username')
+            .eq('id', user.id)
+            .single();
+          
+          if (!error && data) {
+            setUserProfile(data);
+            // Update the welcome message with the user's name
+            setMessages(prev => prev.map(msg => 
+              msg.id === '1' 
+                ? { ...msg, content: `Hello ${data.username}! I'm DetoxifyAI, your recovery companion. I'm here to support you on your journey. How are you feeling today?` }
+                : msg
+            ));
+          }
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
 
   useEffect(() => {
     scrollToBottom();
@@ -89,7 +121,9 @@ export const ChatInterface: React.FC = () => {
         </div>
         <div>
           <h3 className="font-semibold text-gray-900">DetoxifyAI Companion</h3>
-          <p className="text-sm text-gray-500">Your recovery support partner</p>
+          <p className="text-sm text-gray-500">
+            {userProfile?.username ? `Supporting ${userProfile.username}'s recovery` : 'Your recovery support partner'}
+          </p>
         </div>
       </div>
 

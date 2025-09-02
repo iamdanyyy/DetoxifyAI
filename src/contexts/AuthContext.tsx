@@ -103,6 +103,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Continue anyway as the trigger should handle it
       }
     }
+    
+    // Sign out the user after successful signup to redirect to login
+    await supabase.auth.signOut();
   };
 
   const signOut = async () => {

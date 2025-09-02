@@ -1,12 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Heart, Menu, X, LogOut, User, Crown, BarChart3, MessageCircle } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { supabase } from '../../lib/supabase';
 
 export const Navigation: React.FC = () => {
   const { user, signOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
   const location = useLocation();
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (user) {
+        try {
+          const { data, error } = await supabase
+            .from('users')
+            .select('username')
+            .eq('id', user.id)
+            .single();
+          
+          if (!error && data) {
+            setUserProfile(data);
+          }
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
 
   const navigationItems = [
     { name: 'Dashboard', href: '/dashboard', icon: <BarChart3 className="w-5 h-5" /> },
@@ -62,7 +86,7 @@ export const Navigation: React.FC = () => {
                   <User className="w-4 h-4 text-primary-600" />
                 </div>
                 <span className="text-sm font-medium text-gray-700">
-                  {user.email}
+                  {userProfile?.username || user.email}
                 </span>
               </div>
             )}
@@ -109,14 +133,14 @@ export const Navigation: React.FC = () => {
             {user && (
               <>
                 <div className="border-t border-gray-200 pt-4 mt-4">
-                  <div className="flex items-center gap-3 px-3 py-2">
-                    <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-primary-600" />
-                    </div>
-                    <span className="text-sm font-medium text-gray-700">
-                      {user.email}
-                    </span>
+                                  <div className="flex items-center gap-3 px-3 py-2">
+                  <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-primary-600" />
                   </div>
+                  <span className="text-sm font-medium text-gray-700">
+                    {userProfile?.username || user.email}
+                  </span>
+                </div>
                 </div>
                 
                 <button

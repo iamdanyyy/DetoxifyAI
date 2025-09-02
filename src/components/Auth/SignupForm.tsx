@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { Heart, Lock, Mail, User, Calendar } from 'lucide-react';
+import { Heart, Lock, Mail, User, Calendar, Eye, EyeOff } from 'lucide-react';
 
 interface SignupFormProps {
   onSwitchToLogin: () => void;
@@ -11,8 +11,10 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [sobrietyStart, setSobrietyStart] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
   
   const { signUp } = useAuth();
 
@@ -23,6 +25,11 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
 
     try {
       await signUp(email, password, username, sobrietyStart);
+      setSuccess(true);
+      // Redirect to login after 2 seconds
+      setTimeout(() => {
+        onSwitchToLogin();
+      }, 2000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to sign up');
     } finally {
@@ -44,6 +51,12 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
             {error}
+          </div>
+        )}
+        
+        {success && (
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+            Account created successfully! Redirecting to login...
           </div>
         )}
 
@@ -91,14 +104,21 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               id="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="input-field pl-10"
+              className="input-field pl-10 pr-12"
               placeholder="Create a password"
               required
               minLength={6}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
           </div>
         </div>
 
@@ -121,10 +141,10 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || success}
           className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? 'Creating account...' : 'Create Account'}
+          {loading ? 'Creating account...' : success ? 'Account Created!' : 'Create Account'}
         </button>
       </form>
 

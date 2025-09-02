@@ -84,6 +84,11 @@ export const DashboardPage: React.FC = () => {
                 <p className="text-primary-100 mt-1">
                   {getMotivationalMessage()}
                 </p>
+                {userProfile?.username && (
+                  <p className="text-primary-200 text-sm mt-2">
+                    Keep going strong, {userProfile.username}! 💪
+                  </p>
+                )}
               </div>
             </div>
             
