@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, MessageCircle, Bot } from 'lucide-react';
+import { Send, Bot } from 'lucide-react';
 import { aiService } from '../../lib/ai';
 
 interface ChatMessage {

@@ -5,7 +5,7 @@ export const ensureUserProfile = async (user: any) => {
 
   try {
     // Check if user profile exists
-    const { data: existingProfile, error: fetchError } = await supabase
+    const { error: fetchError } = await supabase
       .from('users')
       .select('*')
       .eq('id', user.id)

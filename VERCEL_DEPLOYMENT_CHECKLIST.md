@@ -9,7 +9,7 @@
   - [ ] `REACT_APP_INTASEND_PUBLIC_KEY`
   - [ ] `REACT_APP_INTASEND_SECRET_KEY`
 
-- [ ] **Build Test**: Run `npm run build` locally - ✅ COMPLETED
+- [x] **Build Test**: Run `npm run build` locally - ✅ COMPLETED
 - [ ] **Git Repository**: Code is committed and pushed to Git
 - [ ] **Vercel Account**: Account created and logged in
 

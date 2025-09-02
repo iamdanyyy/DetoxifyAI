@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { ProgressLog } from '../../lib/supabase';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { format, differenceInDays } from 'date-fns';
-import { TrendingUp, Calendar, Target, Award, Heart, Smile, Meh, Frown, Angry } from 'lucide-react';
+import { TrendingUp, Calendar, Target, Heart, Smile, Meh, Frown, Angry } from 'lucide-react';
 
 export const ProgressDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -12,14 +12,7 @@ export const ProgressDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<any>(null);
 
-  useEffect(() => {
-    if (user) {
-      fetchProgressLogs();
-      fetchUserProfile();
-    }
-  }, [user]);
-
-  const fetchProgressLogs = async () => {
+  const fetchProgressLogs = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -36,9 +29,9 @@ export const ProgressDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
-  const fetchUserProfile = async () => {
+  const fetchUserProfile = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -53,7 +46,14 @@ export const ProgressDashboard: React.FC = () => {
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchProgressLogs();
+      fetchUserProfile();
+    }
+  }, [user, fetchProgressLogs, fetchUserProfile]);
 
   const getSobrietyDays = () => {
     if (!userProfile?.sobriety_start) return 0;
