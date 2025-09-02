@@ -27,7 +27,7 @@ An AI-powered web application designed to support individuals on their addiction
 - **Payments**: IntaSend API
 - **Charts**: Recharts
 - **Icons**: Lucide React
-- **Deployment**: Bolt.new
+- **Deployment**: Vercel (recommended) or Bolt.new
 
 ## 📋 Prerequisites
 
@@ -184,7 +184,29 @@ src/
 
 ## 🚀 Deployment
 
-### Deploy to Bolt.new
+### Deploy to Vercel (Recommended)
+
+1. **Push your code to GitHub**
+2. **Connect to Vercel**:
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Import your Git repository
+   - Select "Create React App" framework preset
+3. **Configure build settings**:
+   - Build Command: `npm run build`
+   - Output Directory: `build`
+   - Install Command: `npm install`
+4. **Set environment variables** in Vercel dashboard:
+   - `REACT_APP_SUPABASE_URL`
+   - `REACT_APP_SUPABASE_ANON_KEY`
+   - `REACT_APP_OPENAI_API_KEY`
+   - `REACT_APP_INTASEND_PUBLIC_KEY`
+   - `REACT_APP_INTASEND_SECRET_KEY`
+5. **Deploy!**
+
+📖 **Detailed deployment guide**: See [DEPLOYMENT.md](./DEPLOYMENT.md) for step-by-step instructions.
+
+### Deploy to Bolt.new (Alternative)
 1. Push your code to GitHub
 2. Connect your repository to Bolt.new
 3. Set environment variables in Bolt.new dashboard
@@ -195,7 +217,8 @@ Make sure to set these in your production environment:
 - `REACT_APP_SUPABASE_URL`
 - `REACT_APP_SUPABASE_ANON_KEY`
 - `REACT_APP_OPENAI_API_KEY`
-- `REACT_APP_INTASEND_API_KEY`
+- `REACT_APP_INTASEND_PUBLIC_KEY`
+- `REACT_APP_INTASEND_SECRET_KEY`
 
 ## 🔒 Security Features
 
