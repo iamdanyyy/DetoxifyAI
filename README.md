@@ -1,4 +1,5 @@
 # DetoxifyAI - Addiction Recovery & Detox Support App
+[Live Deployment](https://detoxifyai-seven.vercel.app/)
 
 An AI-powered web application designed to support individuals on their addiction recovery and detoxification journey. Built with React, TypeScript, and Supabase.
 
